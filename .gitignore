@@ -25,3 +25,6 @@ yarn-error.log*
 # vs code
 .vscode
 *.code-workspace
+
+# office temp files
+**/~$*
