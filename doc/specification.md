@@ -2,12 +2,10 @@
 
 1. Pick the **Era of play**:
     - Enterprise
-    - Original series
-    - The next generation
+    - Original Series
+    - The Next Generation
 
-2. Choose or roll **Species**  
-    Depends on era of play chosen. Species with no chance of roll are unavailable  
-    The Species gives the following benefit:
+2. Choose or roll **Species**. Depends on era of play chosen. Species with no chance of roll are unavailable. Grants the following benefit:
     - a *trait* equals the species name
     - 3 *attributes* to raise by 1
     - 1 *talent* from the general pool or from the 2 species specific
@@ -15,18 +13,16 @@
     Special cases: 
     - Humans get to choose 3 *attribute* to increase
 
-3. Choose or roll the **Environment**  
-    The Environment grants the following benefits:
+3. Choose or roll the **Environment**. Grants the following benefits:
     - a *value*
     - an *attibute* increase (see excel)
     - a *discipline* increase
 
     Special cases:
-    - "Homeworld" chooses from the species attributes
-    - "Another species' world" gets to choose or roll the another species and choos from its attribute list
+    - *Homeworld* chooses from the species attributes
+    - *Another species' world* gets to choose or roll the another species and choos from its attribute list
 
-4. Choose or roll the **Upbringing**  
-    The Upbringing grant the following benefits:
+4. Choose or roll the **Upbringing**. Grants the following benefits:
     - 2 choices of *attribute* sets: Accepted or Rebelled
     - +1 to a *discipline*, choosen from a list
     - a *focus*
@@ -35,21 +31,18 @@
     Special cases:
     - "Starfleet" gets to choose from any discipline
 
-5. Choose or roll the **Starfleet academy** path  
-    The academy track grants the following benefits:
+5. Choose or roll the **Starfleet academy** path. Grants the following benefits:
     - a *value*
     - +3 point of *attributes*, maximum +2 increase per attribute, any attribute
     - a major *discipline* (+2) and 2 minor *disciplines* (+1). No discipline can be higher than 4
     - 3 *focuses*
     - a *talent*
 
-6. Choose the **Career**  
-    The career step provides the following benefits:
+6. Choose the **Career**. Grants the following benefits:
     - a *value*
     - a *talent*
 
-7. Choose or roll two **Career Event**  
-    A career event provides
+7. Choose or roll two **Career Event**. Grants the following benefits:
     - an *attribute* increase
     - a *discipline* increase
     - one *focus*
@@ -73,4 +66,4 @@
 
 
 # Building blocks of the process
-- choose x increments out of these y attributes. The maximum increment per attribute is z
+- choose x increments out of these y *attributes*. The maximum increment per attribute is z
