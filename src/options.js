@@ -55,6 +55,11 @@ export default {
         {"name":"Original Series","species":[0,3,4,5,6,7]},         // 1
         {"name":"The Next Generation","species":[0,1,2,3,4,5,6,7]}  // 2
     ],
+    "speciesRoll": [ // do while roll > value above
+        [2,4,16,18,20], // era 0
+        [2,4,14,16,18,20], // era 1
+        [2,4,6,8,14,16,18,20] // era 2
+    ],
     "species": [
         {"name":"Andorian","attrs":[0,1,4],     // 0
             "speciesTalents":["Proud and Honorable","The Ushaan"],
@@ -80,10 +85,5 @@ export default {
         {"name":"Vulcan","attrs":[0,2,5],       // 7
             "speciesTalents":["Kolinahr","Mind-meld","Nerve Pinch"],
             "exValue":"The Needs of the Many Outweigh the Needs of the Few, or the One"}
-    ],
-    "speciesRoll": [ // do while roll > value above
-        [2,4,16,18,20], // era 0
-        [2,4,14,16,18,20], // era 1
-        [2,4,6,8,14,16,18,20] // era 2
     ]
 }

@@ -15,7 +15,7 @@
 
 3. Choose or roll the **Environment**. Grants the following benefits:
     - a *value*
-    - an *attibute* increase (see excel)
+    - an *attibute* increase
     - a *discipline* increase
 
     Special cases:
@@ -31,7 +31,7 @@
     Special cases:
     - "Starfleet" gets to choose from any discipline
 
-5. Choose or roll the **Starfleet academy** path. Grants the following benefits:
+5. Choose or roll the **Starfleet Academy** path. Grants the following benefits:
     - a *value*
     - +3 point of *attributes*, maximum +2 increase per attribute, any attribute
     - a major *discipline* (+2) and 2 minor *disciplines* (+1). No discipline can be higher than 4
@@ -65,5 +65,77 @@
         - Damage Bonus = Security
 
 
-# Building blocks of the process
-- choose x increments out of these y *attributes*. The maximum increment per attribute is z
+# Implementation
+
+## Login screen
+Standard login screen with the basic controls:
+- log in with google, facebook, etc.
+- register
+- forgot password
+
+### components:
+- error message
+- button
+- textarea
+- command link ?
+
+
+## List of characters (Home)
+Some sort of list (table or panels) of charaters with hovering action items.
+Details provided:
+- Name
+- Era of play
+- Species
+- Starfleet academy path
+
+The actions are:
+- add new (list level action)
+- view details
+- edit
+- delete
+
+### components:
+- list or panel per character. Ideally both
+- action buttons per character
+- action button on the list
+
+
+## character viewer
+Tries to look like the actual character sheet and statically displays everything done so far
+
+### components:
+- labels
+- losts of layout and formatting
+
+
+## character editor
+The generation process is represented by tabs. The tabs change status as the process moves along
+The individual tabs will host mostly form controls.
+Tabs:
+1. basic info, with:
+    - name
+    - era of play
+2. Species (enabled after era of play selected)
+    - choose or roll species
+    - (humans) selecting 3 attribute out of 6
+    - choose a talent from the species or general list
+3. Environment (enabled after Species selected)
+    - pick an attribute
+    - pick a discipline
+    - write a talent
+4. Upbringing
+    - pick accepted/rejected
+    - pick a discipline
+    - write a focus
+    - write a talent
+5. Academy
+6. Career
+7. Career events
+
+
+### components:
+
+| component                     | material ui | MS fabric | Semantic UI |
+|-------------------------------|-------------|-----------|-------------|
+| wizard/tab/accordion          | https://material-ui.com/components/steppers/ | https://developer.microsoft.com/en-us/fabric#/controls/web/pivot | https://react.semantic-ui.com/modules/tab/ |
+| number plus/minus and input   | https://material-ui.com/components/slider/ | https://developer.microsoft.com/en-us/fabric#/controls/web/spinbutton | https://react.semantic-ui.com/elements/input/ |
