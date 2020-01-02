@@ -1,22 +1,25 @@
-.App {
-  text-align: center;
-}
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans+Extra+Condensed&display=swap');
 
-.App-logo {
-  height: 40vmin;
+body {
+  font-family: 'Fira Sans Extra Condensed', sans-serif;
+  padding: 0px;
+  margin: 0px;
+  background-color: black;
+  color: lavender;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+header {
+  padding: 0.6rem 1.2rem;
+  font-size: 1.8rem;
+  font-weight: bolder;
+  margin: 0rem 0.3rem 0.6rem 0.3rem;
+  border-width: 0rem 0rem 0.1rem 0.6rem;
+  border-color: mediumpurple;
+  border-style: solid;
+  border-bottom-left-radius: 1.2rem;
 }
-
-.App-link {
-  color: #09d3ac;
+footer {
+  border-top: 0.1rem solid mediumpurple;
+  text-align: right;
+  margin: 0.6rem 0.3rem 0rem 0.3rem;
+  font-size: 0.8rem;
 }

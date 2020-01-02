@@ -96,8 +96,13 @@ The actions are:
 
 ### components:
 - list or panel per character. Ideally both
-- action buttons per character
-- action button on the list
+- action buttons per character: view, edit, delete
+- action button on the list: add new
+
+### navigation
+- character editor (per character)
+- character viewer (per character)
+- logout
 
 
 ## character viewer
@@ -107,6 +112,8 @@ Tries to look like the actual character sheet and statically displays everything
 - labels
 - losts of layout and formatting
 
+### Navigation
+- home
 
 ## character editor
 The generation process is represented by tabs. The tabs change status as the process moves along
@@ -132,8 +139,12 @@ Tabs:
 6. Career
 7. Career events
 
+### Navigation
+- home (exit without saving)
+- save
 
-### components:
+
+# global components
 
 | component                     | material ui | MS fabric | Semantic UI |
 |-------------------------------|-------------|-----------|-------------|

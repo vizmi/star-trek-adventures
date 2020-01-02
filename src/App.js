@@ -1,19 +1,31 @@
 import React from 'react';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 
-//import options from './options'
+import './App.css'
 
-function App() {
-  console.log()
+import ChrList from './character/ChrList'
+import ChrView from './character/view/ChrView'
+import ChrEdit from './character/edit/ChrEdit'
 
+export default function App() {
   return (
     <div>
-      <header><strong>STARFLEET PERSONNEL FILE</strong></header>
-      <section>Section</section>
-      <aside>Aside</aside>
-      <footer>Footer</footer>
+      <header>
+        <span><strong> Star Trek Adventures | </strong></span>
+        <span><small> Character Generator </small></span>
+      </header>
+      <Router>
+        <Switch>
+          <Redirect exact from="/" to="/character"/>
+          <Route exact path="/character" component={ChrList} />
+          <Redirect exact from="/character/:id" to="/character/view/:id"/>
+          <Route path="/character/view/:id" component={ChrView} />
+          <Route path="/character/edit/:id" component={ChrEdit} />
+        </Switch>
+      </Router>
+      <footer>
+        <div> © 2019 CoderSamurai </div>
+      </footer>
     </div>
-  );
+  )
 }
-
-export default App;
