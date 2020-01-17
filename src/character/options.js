@@ -61,29 +61,29 @@ export default {
         [2,4,6,8,14,16,18,20] // era 2
     ],
     "species": [
-        {"name":"Andorian","attrs":[0,1,4],     // 0
+        {"name":"Andorian","attrs":[1,1,0,0,1,0],       // 0
             "speciesTalents":["Proud and Honorable","The Ushaan"],
             "exValue":"Proud Son/Daughter of Andoria"},
-        {"name":"Bajorian","attrs":[0,1,3],     // 1
+        {"name":"Bajorian","attrs":[1,1,0,1,0,0],       // 1
             "speciesTalents":["Orb Experience","Strong Pagh"],
             "exValue":"Faith in the Prophets"},
-        {"name":"Betazoid","attrs":[3,4,5],     // 2
+        {"name":"Betazoid","attrs":[0,0,0,1,1,1],       // 2
             "speciesTalents":["Empath","Telepath"],
             "exValue":"Compassion through Understanding"},
-        {"name":"Denobulan","attrs":[2,3,5],    // 3
+        {"name":"Denobulan","attrs":[0,0,1,1,0,1],      // 3
             "speciesTalents":["Cultural Felxibility","Parent Figure"],
             "exValue":"Safety in Numbers"},
-        {"name":"Human","attrs":[0,1,2,3,4,5],  // 4
+        {"name":"Human", "attrs": undefined,                  // 4
             "speciesTalents":["Resolute","Spirit of Discovery"],
             "exValue":"The Drive for Exploration"},
-        {"name":"Tellarite","attrs":[0,2,3],    // 5
+        {"name":"Tellarite","attrs":[1,0,1,1,0,0],      // 5
             "speciesTalents":["Incisive Scrutiny","Strudy"],
             "exValue":"All Ideas must Withstand Scrutiny"},
-        {"name":"Trill","attrs":[0,4,5],        // 6
+        {"name":"Trill","attrs":[1,0,0,0,1,1],          // 6
             "speciesTalents":["Former Initiate","Joined"],
             "exValue":"Four Lifetimes of Adventure"},
-        {"name":"Vulcan","attrs":[0,2,5],       // 7
+        {"name":"Vulcan","attrs":[1,0,1,0,0,1],         // 7
             "speciesTalents":["Kolinahr","Mind-meld","Nerve Pinch"],
-            "exValue":"The Needs of the Many Outweigh the Needs of the Few, or the One"}
-    ]
+            "exValue":"The Needs of the Many Outweights the Needs of the Few, or the One"}
+    ],
 }

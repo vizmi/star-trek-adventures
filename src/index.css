@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans+Extra+Condensed&display=swap');
+
+body {
+  font-family: 'Fira Sans Extra Condensed', sans-serif;
+  padding: 0px;
+  margin: 0px;
+  background-color: black;
+  color: lavender;
+}
+header {
+  padding: 0.6rem 1.2rem;
+  font-size: 1.8rem;
+  font-weight: bolder;
+  margin: 0rem 0.3rem 0.6rem 0.3rem;
+  border-width: 0rem 0rem 0.1rem 0.6rem;
+  border-color: mediumpurple;
+  border-style: solid;
+  border-bottom-left-radius: 1.2rem;
+}
+footer {
+  border-top: 0.1rem solid mediumpurple;
+  text-align: right;
+  margin: 0.6rem 0.3rem 0rem 0.3rem;
+  font-size: 0.8rem;
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  font-size: 1.2rem;
+}
+
+.border {
+  border-width: 0.1rem 0.6rem 0.1rem 0.6rem;
+  border-style: solid;
+  border-color: plum;
+  border-radius: 1.2rem;
+  padding: 0.6rem;
+  margin: 0.3rem;
+}
+
+.list-grid {
+  display:grid;
+  grid-template-columns: min-content 1fr;
+  grid-gap: 0.3rem 0.6rem;
+  align-items: center;
+}
+
+.form-grid {
+  display:grid;
+  grid-template-columns: 8em 1fr;
+  grid-gap: 0.6rem;
+  align-items: center;
+}
+
+.card-label {
+  font-weight: bold;
+  text-align: right;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.card-text {
+  white-space: nowrap;
+  overflow: hidden;
+}
+.card-menu {
+  margin-top: 0.6rem;
+}
+.card-menu > ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.card-menu > ul > li {
+  display: inline-block;
+}
+
+a {
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  margin: 0.3rem;
+  padding: 0.3rem;
+  color: black;
+  background-color: orange;
+  border-radius: 1.2rem;
+}
+
+a:hover {
+  background-color: peru;
+}
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.5;
+}
+
+.header-background {
+  border-radius: 1.2rem;
+  background-color: darkslateblue;
+  padding: 0rem 1.2rem;
+  margin:0.6rem;
+  width: 18rem;
+}
+
+.header-text {
+  background-color: black;
+  font-size: 1.5rem;
+  font-weight: bolder;
+  display: inline;
+  padding: 0rem 0.3rem;
+}
+
+input {
+  background-color: black;
+  color: lavender;
+  border-style: solid;
+  border-color: darkslateblue;
+  border-radius: 0.3rem;
+}
+
+button {
+  background-color: darkslateblue;
+  color: lavender;
+  border-style: solid;
+  border-color: darkslateblue;
+  border-radius: 0.3rem;
+  margin: 0rem 0.3rem;
+  padding: 0.1rem 0.3rem;
+}
+
+.info {
+  background-color: black;
+  color: lavender;
+  border-style: solid;
+  border-color: darkslateblue;
+  border-radius: 0.3rem;
+  margin: 0rem 0.3rem;
+  padding: 0.1rem 0.3rem;
+}

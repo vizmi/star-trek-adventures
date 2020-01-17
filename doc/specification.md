@@ -20,7 +20,7 @@
 
     Special cases:
     - *Homeworld* chooses from the species attributes
-    - *Another species' world* gets to choose or roll the another species and choos from its attribute list
+    - *Another species' world* gets to choose or roll the another species and choose from its attribute list
 
 4. Choose or roll the **Upbringing**. Grants the following benefits:
     - 2 choices of *attribute* sets: Accepted or Rebelled

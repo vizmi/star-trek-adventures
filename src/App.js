@@ -1,8 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 
-import './App.css'
-
 import ChrList from './character/ChrList'
 import ChrView from './character/view/ChrView'
 import ChrEdit from './character/edit/ChrEdit'
