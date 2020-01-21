@@ -1,15 +1,15 @@
 export default class Character {
-    constructor(id, name, era, species, speciesAttr) {
+    constructor(id, name, era, species) {
         this.id = id
         this.name = name
         this.era = era
         this.species = species
-        this.speciesAttr = speciesAttr
-        this.speciesTalents = []
-        this.talents = []
-    }
 
-    toString() {
-        return JSON.stringify(this)
+        this.speciesAttributes = undefined
+        this.speciesTalents = undefined
+        this.environment = undefined
+        this.anotherSpecies = undefined
+        this.environmentAttributes = undefined
+        this.environmentValue = undefined
     }
 }

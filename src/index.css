@@ -131,6 +131,7 @@ button {
 }
 
 .info {
+  white-space: nowrap;
   background-color: black;
   color: lavender;
   border-style: solid;

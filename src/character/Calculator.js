@@ -13,14 +13,6 @@ export default class Calculator {
         return 1
     }
 
-    getTalentNames() {
-        let result = []
-        result.concat(this.char.speciesTalents.map(t => options.species[this.char.species].speciesTalents[t]))
-        result.concat(this.char.talents.map(t => options.talents[t].name))
-
-        return result
-    }
-
     getTraits() {
         let result = []
         result.push(options.species[this.char.species].name)
@@ -30,7 +22,16 @@ export default class Calculator {
         if (!reqs || reqs.length === 0) {
             return true
         }
-        return !reqs.some( req => this.getDiscipline(req.dcp) < req.min)
+        return !reqs.some( req => {
+            switch (req.type) {
+                case "spc":
+                    return this.char.species !== req.id 
+                case "dcp":
+                    return this.getDiscipline(req.id) < req.min
+                default:
+                    return false
+            }
+        })
     }
 
 }
