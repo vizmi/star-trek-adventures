@@ -9,8 +9,13 @@ export default class Calculator {
         return 7 + this.char.speciesAttr[index]
     }
 
-    getDiscipline(index) {
-        return 1
+    getDiscipline(index, phase) {
+        let result = 1
+        if (phase === "species" || this.char.environmentDisciplines === undefined) return result
+        result += this.char.environmentDisciplines[index]
+        if (phase === "upbringing") return result
+
+        return result
     }
 
     getTraits() {
@@ -18,16 +23,16 @@ export default class Calculator {
         result.push(options.species[this.char.species].name)
     }
     
-    isTalentAvailable(reqs) {
+    isTalentAvailable(reqs, phase) {
         if (!reqs || reqs.length === 0) {
             return true
         }
-        return !reqs.some( req => {
+        return reqs.some( req => {
             switch (req.type) {
                 case "spc":
-                    return this.char.species !== req.id 
+                    return phase !== "upbringing" && this.char.species === req.id 
                 case "dcp":
-                    return this.getDiscipline(req.id) < req.min
+                    return this.getDiscipline(req.id, phase) >= req.min
                 default:
                     return false
             }

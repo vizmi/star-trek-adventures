@@ -94,7 +94,7 @@ export default class ChrEdit extends React.Component {
 
         let availableSpeciesTalents = []
         options.talents.forEach((t, i) => {
-            if (calc.isTalentAvailable(t.reqs)) {
+            if (calc.isTalentAvailable(t.reqs, "species")) {
                 availableSpeciesTalents.push(i)
             }
         })
@@ -123,11 +123,20 @@ export default class ChrEdit extends React.Component {
                 break
         }
 
-        let environmentValueExamples = "'" + (options.species[char.species]?.exValue || "") + "', '" +
-            options.environments[char.environment]?.exValue + "'"
+        let environmentValueExamples = char.species === undefined ? "" : 
+            "'" + (options.species[char.species]?.exValue || "") + "', "
+        environmentValueExamples +=  "'" + options.environments[char.environment]?.exValue + "'"
 
         let availableEnvironmentDisciplines = options.environments[char.environment]?.disciplines
+        let availableUpbringingDisciplines = options.upbringings[char.upbringing]?.disciplines
+        let upbringingFocusExamples = options.upbringings[char.upbringing]?.exFocuses
+        let availableUpbringingTalents = []
+        options.talents.forEach((t, i) => {
+            if (calc.isTalentAvailable(t.reqs, "upbringing")) {
+                availableUpbringingTalents.push(i)
+            }
 
+        })
         return (
             <div className="border">
                 <div className="header-background">
@@ -222,6 +231,42 @@ export default class ChrEdit extends React.Component {
                         Upbringing
                     </div>
                 </div>
+                <div className="form-grid">
+                    <Upbringing
+                        fieldName="upbringing"
+                        hidden={this.isHidden("upbringing")}
+                        possibleValues={options.upbringings}
+                        value={char.upbringing}
+                        onChange={this.onChange} />
+                    <UpbringingAccepted
+                        fieldName="upbringingAccepted"
+                        hidden={this.isHidden("upbringingAccepted")}
+                        value={char.upbringingAccepted}
+                        onChange={this.onChange} />
+                    <Disciplines
+                        fieldName="upbringingDisciplines"
+                        hidden={this.isHidden("upbringingDisciplines")}
+                        possibleValues={options.disciplines}
+                        availableValues={availableUpbringingDisciplines}
+                        choices={1}
+                        values={char.upbringingDisciplines || [0,0,0,0,0,0]}
+                        editable={true}
+                        onChange={this.onChange} />
+                    <Focus
+                        fieldName="upbringingFocus"
+                        hidden={this.isHidden("upbringingFocus")}
+                        value={char.upbringingFocus || ""}
+                        examples={upbringingFocusExamples}
+                        onChange={this.onChange} />
+                    <Talents
+                        fieldName="upbringingTalent"
+                        hidden={this.isHidden("upbringingTalent")}
+                        possibleValues={options.talents}
+                        availableValues={availableUpbringingTalents}
+                        choices={1}
+                        values={char.upbringingTalent || []}
+                        onChange={this.onChange} />
+                </div>
             </div>
         )
     }
@@ -233,6 +278,7 @@ export default class ChrEdit extends React.Component {
         })
     }
 }
+
 
 class Era extends React.Component {
     render = () => {
@@ -256,6 +302,7 @@ class Era extends React.Component {
     }
 }
 
+
 class Name extends React.Component {
     render = () => (
         <React.Fragment>
@@ -267,6 +314,7 @@ class Name extends React.Component {
         this.props.onChange(event.target.name, event.target.value)
     }
 }
+
 
 class Species extends React.Component {
     render = () => {
@@ -310,6 +358,7 @@ class Species extends React.Component {
     }
 }
 
+
 class Attributes extends React.Component {
     render = () => {
         if (this.props.hidden) return null
@@ -344,6 +393,7 @@ class Attributes extends React.Component {
         this.props.onChange(event.target.name, values)
     }
 }
+
 
 class Talents extends React.Component {
     render = () => {
@@ -380,6 +430,7 @@ class Talents extends React.Component {
         this.props.onChange(event.target.name, values)
     }
 }
+
 
 class Environment extends React.Component {
     render = () => {
@@ -419,12 +470,13 @@ class Environment extends React.Component {
     }
 }
 
+
 class Value extends React.Component {
     render = () => {
         if (this.props.hidden) return null
         return <React.Fragment>
             <div className="card-label">Value: </div>
-            <input type="text" name="environmentValue" value={this.props.value} onChange={this.onChange}/>
+            <input type="text" name={this.props.fieldName} value={this.props.value} onChange={this.onChange}/>
             <div style={{textAlign:"right"}}>Examples: </div>
             {this.props.examples}
         </React.Fragment>
@@ -433,6 +485,7 @@ class Value extends React.Component {
         this.props.onChange(event.target.name, event.target.value)
     }
 }
+
 
 class Disciplines extends React.Component {
     render = () => {
@@ -450,7 +503,6 @@ class Disciplines extends React.Component {
             </label>
         ))
         let choose = remaining > 0 ? <span className="info"> Choose {remaining} more </span> : null
-
         return (<React.Fragment>
             <div className="card-label">Disciplines: </div>
             <div>
@@ -467,5 +519,88 @@ class Disciplines extends React.Component {
         values[index] = values[index] === 0 ? 1 : 0
         this.props.onChange(event.target.name, values)
     }
+}
 
+
+class Upbringing extends React.Component {
+    render = () => {
+        if (this.props.hidden) return null
+        let upbs = this.props.possibleValues.map( (upb, i) => {
+            return (
+                <label key={i}>
+                    <input type="radio" name={this.props.fieldName} value={i}
+                        checked={this.props.value === i}
+                        onChange={this.onChange} />
+                    {upb.name}
+                </label>
+            )
+        })
+
+        return (<React.Fragment>
+            <div className="card-label">Upbringing: </div>
+            <div>
+                {upbs}
+                <button type="button" name="rollForUpbringing"
+                    onClick={this.onClickRoll}> Roll </button>
+            </div>
+        </React.Fragment>)
+    }
+
+    onChange = (event) => {
+        this.props.onChange(event.target.name, parseInt(event.target.value))
+    }
+
+    onClickRoll = () => {
+        let roll = Math.floor(Math.random() * 6) + 1
+        console.log("roll", roll)
+        let value = this.props.possibleValues.findIndex( e => e.roll === roll)
+        console.log("name", this.props.fieldName)
+        console.log("value", value)
+        this.props.onChange(this.props.fieldName, value)
+    }
+}
+
+
+class UpbringingAccepted extends React.Component {
+    render = () => {
+        if (this.props.hidden) return null
+
+        return (<React.Fragment>
+            <div className="card-label">Is accepted? </div>
+            <div>
+                <label>
+                    <input type="radio" name={this.props.fieldName} value="true"
+                        checked={this.props.value === "true"}
+                        onChange={this.onChange} />
+                    Accepted
+                </label>
+                <label>
+                    <input type="radio" name={this.props.fieldName} value="false"
+                        checked={this.props.value === "false"}
+                        onChange={this.onChange} />
+                    Rejected
+                </label>
+            </div>
+        </React.Fragment>)
+    }
+
+    onChange = (event) => {
+        this.props.onChange(event.target.name, event.target.value)
+    }
+}
+
+
+class Focus extends React.Component {
+    render = () => {
+        if (this.props.hidden) return null
+        return <React.Fragment>
+            <div className="card-label">Focus: </div>
+            <input type="text" name={this.props.fieldName} value={this.props.value} onChange={this.onChange}/>
+            <div style={{textAlign:"right"}}>Examples: </div>
+            {this.props.examples}
+        </React.Fragment>
+    }
+    onChange = (event) => {
+        this.props.onChange(event.target.name, event.target.value)
+    }
 }
