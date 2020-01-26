@@ -5,6 +5,21 @@ import chrs from '../testChars'
 import Character from '../Character'
 import Calculator from '../Calculator'
 
+import Academy from './Academy'
+import Attributes from './Attributes'
+import AttributesMulti from './AttributesMulti'
+import Disciplines from './Disciplines'
+import Environment from './Environment'
+import Era from './Era'
+import Focus from './Focus'
+import Name from './Name'
+import Species from './Species'
+import Talents from './Talents'
+import Upbringing from './Upbringing'
+import UpbringingAccepted from './UpbringingAccepted'
+import Value from './Value'
+
+
 export default class ChrEdit extends React.Component {
     // constructor
     constructor(props) {
@@ -48,7 +63,6 @@ export default class ChrEdit extends React.Component {
         options.dependencies.forEach( d => flatten(d.p))
         // save the results
         this.resetDeps = reset
-        console.log("reset dependencies", reset)
         let display = {}
         options.dependencies.forEach( d => {
             display[d.p] = []
@@ -60,12 +74,14 @@ export default class ChrEdit extends React.Component {
                 }
             })
         })
-        this.dispalDeps = display
-        console.log("display dependencies", display)
+        this.displayDeps = display
     }
 
     isHidden = (fieldName) => {
-        return this.dispalDeps[fieldName].some((d) => {
+        if (this.displayDeps[fieldName] === undefined) {
+            throw new Error("please add " + fieldName + " to options.dependencies")
+        }
+        return this.displayDeps[fieldName].some((d) => {
             switch (d) {
                 case "anotherSpecies":
                     return this.state.char[d] === undefined &&
@@ -86,25 +102,24 @@ export default class ChrEdit extends React.Component {
         let calc = new Calculator(char)
         
         let availableSpecies = options.eras[char.era]?.species
-        
-        let availableSpeciesAttributes = options.species[char.species]?.attrs || 
+        let isSpeciesAttributesEditable = options.species[char.species]?.attrs === undefined
+        let theSpeciesAttrs = options.species[char.species]?.attrs ||
             char.speciesAttributes || [0,0,0,0,0,0]
         
-        let isSpeciesAttributesEditable = options.species[char.species]?.attrs === undefined
-
+        let selectedTalents = calc.getTalents()
         let availableSpeciesTalents = []
         options.talents.forEach((t, i) => {
-            if (calc.isTalentAvailable(t.reqs, "species")) {
-                availableSpeciesTalents.push(i)
-            }
-        })
+            if ((((char.speciesTalents || []).includes(i)) || !selectedTalents.includes(i)) &&
+                calc.isTalentAvailable(t.reqs, "species")) {
+                    availableSpeciesTalents.push(i)
+        }})
         
         let availableEnvironmentAttributes = []
         switch (char.environment) {
             case undefined:
                 break
             case 0:
-                availableSpeciesAttributes.forEach((t,i) => {
+                theSpeciesAttrs.forEach((t,i) => {
                     if (t === 1)
                         availableEnvironmentAttributes.push(i)
                 })
@@ -130,13 +145,29 @@ export default class ChrEdit extends React.Component {
         let availableEnvironmentDisciplines = options.environments[char.environment]?.disciplines
         let availableUpbringingDisciplines = options.upbringings[char.upbringing]?.disciplines
         let upbringingFocusExamples = options.upbringings[char.upbringing]?.exFocuses
+
         let availableUpbringingTalents = []
         options.talents.forEach((t, i) => {
-            if (calc.isTalentAvailable(t.reqs, "upbringing")) {
-                availableUpbringingTalents.push(i)
-            }
+            if ((((char.upbringingTalent || []).includes(i)) || !selectedTalents.includes(i)) &&
+                calc.isTalentAvailable(t.reqs, "upbringing")) {
+                    availableUpbringingTalents.push(i)
+        }})
 
-        })
+        let academyValueExamples = options.academies[char.academy]?.exValues
+        let availableAcademyMajors = options.academies[char.academy]?.majors.filter(
+            (d,i)=>calc.getDiscipline(i, "careerEvents") < 3)
+        let availableAcademyMinors = options.disciplines.map((d,i)=>i).filter(
+            (d,i)=>calc.getDiscipline(i, "careerEvents") < 4 &&
+                (char.academyMajorDiscipline||[0,0,0,0,0,0])[i] === 0)
+        let academyFocusExamples = options.academies[char.academy]?.exFocuses
+        let availableAcademyTalents= []
+        options.talents.forEach((t, i) => {
+            if ((((char.academyTalent || []).includes(i)) || !selectedTalents.includes(i)) &&
+                calc.isTalentAvailable(t.reqs, "academy")) {
+                    availableAcademyTalents.push(i)
+        }})
+
+
         return (
             <div className="border">
                 <div className="header-background">
@@ -168,7 +199,7 @@ export default class ChrEdit extends React.Component {
                         possibleValues={options.attributes}
                         availableValues={options.attributes.map((a,i) => i)}
                         choices={3}
-                        values={availableSpeciesAttributes}
+                        values={theSpeciesAttrs}
                         editable={isSpeciesAttributesEditable}
                         onChange={this.onChange} />
                     <Talents
@@ -255,7 +286,7 @@ export default class ChrEdit extends React.Component {
                     <Focus
                         fieldName="upbringingFocus"
                         hidden={this.isHidden("upbringingFocus")}
-                        value={char.upbringingFocus || ""}
+                        values={char.upbringingFocus || []}
                         examples={upbringingFocusExamples}
                         onChange={this.onChange} />
                     <Talents
@@ -267,6 +298,71 @@ export default class ChrEdit extends React.Component {
                         values={char.upbringingTalent || []}
                         onChange={this.onChange} />
                 </div>
+                <div className="header-background">
+                    <div className="header-text">
+                        Academy
+                    </div>
+                </div>
+                <div className="form-grid">
+                    <Academy
+                        fieldName="academy"
+                        hidden={this.isHidden("academy")}
+                        possibleValues={options.academies}
+                        value={char.academy}
+                        onChange={this.onChange} />
+                    <Value
+                        fieldName="academyValue"
+                        hidden={this.isHidden("academyValue")}
+                        value={char.academyValue || ""}
+                        examples={academyValueExamples}
+                        onChange={this.onChange} />
+                    <AttributesMulti
+                        fieldName="academyAttributes"
+                        hidden={this.isHidden("academyAttributes")}
+                        possibleValues={options.attributes}
+                        choices={3}
+                        maxIncrease={2}
+                        values={char.academyAttributes || [0,0,0,0,0,0]}
+                        baseValues={calc.getAttributes("academy")}
+                        onChange={this.onChange}
+                    />
+                    <Disciplines
+                        label="Major:"
+                        fieldName="academyMajorDiscipline"
+                        hidden={this.isHidden("academyMajorDiscipline")}
+                        possibleValues={options.disciplines}
+                        availableValues={availableAcademyMajors}
+                        choices={1}
+                        values={char.academyMajorDiscipline || [0,0,0,0,0,0]}
+                        editable={true}
+                        onChange={this.onChange} />
+                    <Disciplines
+                        label="Minors:"
+                        fieldName="academyMinorDisciplines"
+                        hidden={this.isHidden("academyMinorDisciplines")}
+                        possibleValues={options.disciplines}
+                        availableValues={availableAcademyMinors}
+                        choices={2}
+                        values={char.academyMinorDisciplines || [0,0,0,0,0,0]}
+                        editable={true}
+                        onChange={this.onChange} />
+                    <Focus
+                        fieldName="academyFocus"
+                        hidden={this.isHidden("academyFocus")}
+                        count={3}
+                        values={char.academyFocus || []}
+                        examples={academyFocusExamples}
+                        onChange={this.onChange} />
+                    <Talents
+                        fieldName="academyTalent"
+                        hidden={this.isHidden("academyTalent")}
+                        possibleValues={options.talents}
+                        availableValues={availableAcademyTalents}
+                        choices={1}
+                        values={char.academyTalent || []}
+                        onChange={this.onChange} />
+                </div>
+                
             </div>
         )
     }
@@ -279,328 +375,3 @@ export default class ChrEdit extends React.Component {
     }
 }
 
-
-class Era extends React.Component {
-    render = () => {
-        let eras = this.props.eras.map((era, i) =>
-            (<label key={i}>
-                <input type="radio" name="era" value={i}
-                    checked={this.props.value === i}
-                    onChange={this.onChange} />
-                {era.name}
-            </label>)
-        )
-
-        return (<React.Fragment>
-            <div className="card-label">Era of Play: </div>
-            <div>{eras}</div>
-        </React.Fragment>)
-    }
-
-    onChange = (event) => {
-        this.props.onChange(event.target.name, parseInt(event.target.value))
-    }
-}
-
-
-class Name extends React.Component {
-    render = () => (
-        <React.Fragment>
-            <div className="card-label">Name: </div>
-            <input type="text" name="name" value={this.props.value} onChange={this.onChange}/>
-        </React.Fragment>
-    )
-    onChange = (event) => {
-        this.props.onChange(event.target.name, event.target.value)
-    }
-}
-
-
-class Species extends React.Component {
-    render = () => {
-        if (this.props.hidden) return null
-
-        let species = this.props.possibleValues.map(s => {
-            return (
-                <label key={s}>
-                    <input type="radio" name={this.props.fieldName} value={s}
-                        disabled={this.props.unavailable === s}
-                        checked={this.props.value === s}
-                        onChange={this.onChange} />
-                    {this.props.species[s].name}
-                </label>
-            )
-        })
-
-        return (<React.Fragment>
-            <div className="card-label">Species: </div>
-            <div>
-                {species}
-                <button type="button" name="rollForSpecies"
-                    onClick={this.onClickRoll}> Roll </button>
-            </div>
-        </React.Fragment>)
-    }
-   
-    onChange = (event) => {
-        this.props.onChange(event.target.name, parseInt(event.target.value))
-    }
-
-    onClickRoll = () => {
-        let unavailable = this.props.unavailable || []
-        do {
-            let roll = Math.floor(Math.random() * 20) + 1
-            let spcIdx = 0
-            while (roll > this.props.rolls[spcIdx]) spcIdx++
-            var value = this.props.possibleValues[spcIdx]
-        } while (unavailable === value)
-        this.props.onChange(this.props.fieldName, value)
-    }
-}
-
-
-class Attributes extends React.Component {
-    render = () => {
-        if (this.props.hidden) return null
-        let remaining = this.props.choices - this.props.values.reduce((t, c) => (t + c), 0)
-        let attibutes = this.props.values.map( (attr, i) => (
-            <label key={i}>
-                <input type="checkbox" name={this.props.fieldName} value={i}
-                    disabled={!this.props.editable ||
-                        (!this.props.availableValues.includes(i)) ||
-                        (remaining < 1 && attr === 0)}
-                    checked={attr === 1}
-                    onChange={this.onChange}/>
-                {this.props.possibleValues[i]}
-            </label>
-        ))
-        let choose = remaining > 0 ? <span className="info"> Choose {remaining} more </span> : null
-
-        return (<React.Fragment>
-            <div className="card-label">Attributes: </div>
-            <div>
-                {attibutes}
-                {choose}
-            </div>
-        </React.Fragment>)
-
-    }
-
-    onChange = (event) => {
-        let values = this.props.values
-        let index = parseInt(event.target.value)
-        values[index] = values[index] === 0 ? 1 : 0
-        this.props.onChange(event.target.name, values)
-    }
-}
-
-
-class Talents extends React.Component {
-    render = () => {
-        if (this.props.hidden) return null
-        let remaining = this.props.choices - this.props.values.length
-        let talents = this.props.possibleValues.map( (t,i) => 
-            <label key={i}>
-            <input type="checkbox" name={this.props.fieldName} value={i}
-                disabled={!this.props.availableValues.includes(i) ||
-                    (remaining < 1 && !this.props.values.includes(i))}
-                checked={this.props.values.includes(i)}
-                onChange={this.onChange}/>
-            {t.name}
-        </label>)
-        let choose = remaining > 0 ? <span className="info"> Choose {remaining} more </span> : null
-        return (<React.Fragment>
-            <div className="card-label"> Talents: </div>
-            <div>
-                {talents}
-                {choose}
-            </div>
-        </React.Fragment>)
-    }
-
-    onChange = (event) => {
-        let values = this.props.values
-        let value = parseInt(event.target.value)
-        let index = values.indexOf(value)
-        if (index < 0) {
-            values.push(value)
-        } else {
-            values.splice(index, 1)
-        }
-        this.props.onChange(event.target.name, values)
-    }
-}
-
-
-class Environment extends React.Component {
-    render = () => {
-        if (this.props.hidden) return null
-        let envs = this.props.possibleValues.map( (env, i) => {
-            return (
-                <label key={i}>
-                    <input type="radio" name={this.props.fieldName} value={i}
-                        checked={this.props.value === i}
-                        onChange={this.onChange} />
-                    {env.name}
-                </label>
-            )
-        })
-
-        return (<React.Fragment>
-            <div className="card-label">Environment: </div>
-            <div>
-                {envs}
-                <button type="button" name="rollForEnvironment"
-                    onClick={this.onClickRoll}> Roll </button>
-            </div>
-        </React.Fragment>)
-    }
-
-    onChange = (event) => {
-        this.props.onChange(event.target.name, parseInt(event.target.value))
-    }
-
-    onClickRoll = () => {
-        let roll = Math.floor(Math.random() * 6) + 1
-        console.log("roll", roll)
-        let value = this.props.possibleValues.findIndex( e => e.roll === roll)
-        console.log("name", this.props.fieldName)
-        console.log("value", value)
-        this.props.onChange(this.props.fieldName, value)
-    }
-}
-
-
-class Value extends React.Component {
-    render = () => {
-        if (this.props.hidden) return null
-        return <React.Fragment>
-            <div className="card-label">Value: </div>
-            <input type="text" name={this.props.fieldName} value={this.props.value} onChange={this.onChange}/>
-            <div style={{textAlign:"right"}}>Examples: </div>
-            {this.props.examples}
-        </React.Fragment>
-    }
-    onChange = (event) => {
-        this.props.onChange(event.target.name, event.target.value)
-    }
-}
-
-
-class Disciplines extends React.Component {
-    render = () => {
-        if (this.props.hidden) return null
-        let remaining = this.props.choices - this.props.values.reduce((t, c) => (t + c), 0)
-        let disciplines = this.props.values.map( (dsc, i) => (
-            <label key={i}>
-                <input type="checkbox" name={this.props.fieldName} value={i}
-                    disabled={!this.props.editable ||
-                        (!this.props.availableValues.includes(i)) ||
-                        (remaining < 1 && dsc === 0)}
-                    checked={dsc === 1}
-                    onChange={this.onChange}/>
-                {this.props.possibleValues[i]}
-            </label>
-        ))
-        let choose = remaining > 0 ? <span className="info"> Choose {remaining} more </span> : null
-        return (<React.Fragment>
-            <div className="card-label">Disciplines: </div>
-            <div>
-                {disciplines}
-                {choose}
-            </div>
-        </React.Fragment>)
-
-    }
-
-    onChange = (event) => {
-        let values = this.props.values
-        let index = parseInt(event.target.value)
-        values[index] = values[index] === 0 ? 1 : 0
-        this.props.onChange(event.target.name, values)
-    }
-}
-
-
-class Upbringing extends React.Component {
-    render = () => {
-        if (this.props.hidden) return null
-        let upbs = this.props.possibleValues.map( (upb, i) => {
-            return (
-                <label key={i}>
-                    <input type="radio" name={this.props.fieldName} value={i}
-                        checked={this.props.value === i}
-                        onChange={this.onChange} />
-                    {upb.name}
-                </label>
-            )
-        })
-
-        return (<React.Fragment>
-            <div className="card-label">Upbringing: </div>
-            <div>
-                {upbs}
-                <button type="button" name="rollForUpbringing"
-                    onClick={this.onClickRoll}> Roll </button>
-            </div>
-        </React.Fragment>)
-    }
-
-    onChange = (event) => {
-        this.props.onChange(event.target.name, parseInt(event.target.value))
-    }
-
-    onClickRoll = () => {
-        let roll = Math.floor(Math.random() * 6) + 1
-        console.log("roll", roll)
-        let value = this.props.possibleValues.findIndex( e => e.roll === roll)
-        console.log("name", this.props.fieldName)
-        console.log("value", value)
-        this.props.onChange(this.props.fieldName, value)
-    }
-}
-
-
-class UpbringingAccepted extends React.Component {
-    render = () => {
-        if (this.props.hidden) return null
-
-        return (<React.Fragment>
-            <div className="card-label">Is accepted? </div>
-            <div>
-                <label>
-                    <input type="radio" name={this.props.fieldName} value="true"
-                        checked={this.props.value === "true"}
-                        onChange={this.onChange} />
-                    Accepted
-                </label>
-                <label>
-                    <input type="radio" name={this.props.fieldName} value="false"
-                        checked={this.props.value === "false"}
-                        onChange={this.onChange} />
-                    Rejected
-                </label>
-            </div>
-        </React.Fragment>)
-    }
-
-    onChange = (event) => {
-        this.props.onChange(event.target.name, event.target.value)
-    }
-}
-
-
-class Focus extends React.Component {
-    render = () => {
-        if (this.props.hidden) return null
-        return <React.Fragment>
-            <div className="card-label">Focus: </div>
-            <input type="text" name={this.props.fieldName} value={this.props.value} onChange={this.onChange}/>
-            <div style={{textAlign:"right"}}>Examples: </div>
-            {this.props.examples}
-        </React.Fragment>
-    }
-    onChange = (event) => {
-        this.props.onChange(event.target.name, event.target.value)
-    }
-}

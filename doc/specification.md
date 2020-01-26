@@ -145,8 +145,8 @@ Tabs:
 
 
 # global components
-
-| component                     | material ui | MS fabric | Semantic UI |
-|-------------------------------|-------------|-----------|-------------|
-| wizard/tab/accordion          | https://material-ui.com/components/steppers/ | https://developer.microsoft.com/en-us/fabric#/controls/web/pivot | https://react.semantic-ui.com/modules/tab/ |
-| number plus/minus and input   | https://material-ui.com/components/slider/ | https://developer.microsoft.com/en-us/fabric#/controls/web/spinbutton | https://react.semantic-ui.com/elements/input/ |
+The application's core logic is a quiz: questions after each other. Going back to the pervios question throws away answers. The answers will be stored separately from the characer data.
+An answer does all these:
+1. applies a certain change to the character
+2. opens up new possibilities in later stages of the "quiz"
+Character data will be stored very simialrly to what we have in the character sheet.
